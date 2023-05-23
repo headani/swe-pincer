@@ -1,0 +1,15 @@
+.addButton {
+    -fx-graphic: url('plus.png');
+    -fx-padding: 10;
+}
+
+.pane {
+    -fx-border-color:black;
+    -fx-border-width: 1;
+    -fx-border-style: solid;
+    -fx-background-color: lightgrey;
+}
+
+.gridPane {
+    -fx-padding: 10px;
+}
