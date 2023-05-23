@@ -1,4 +1,4 @@
-package hu.unideb.inf.swe.pincer.controllers;
+package hu.unideb.inf.swe.pincer.controller;
 
 
 import javafx.fxml.FXML;
