@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     private final ItemRepository itemRepository = new ItemRepository();
-    private final TableService tableService = new TableService();
 
     public ItemBla getItemByName(String name) throws ItemDoesNotExistException {
         if (itemRepository.itemExists(name)) {

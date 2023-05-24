@@ -33,9 +33,9 @@ public class TableService {
         }
     }
 
-    public void updateTablePosition(Integer id, Integer x, Integer y) throws TableDoesNotExistException {
+    public void updateTablePosition(Integer id, Coordinates coordinates) throws TableDoesNotExistException {
         if (tableRepository.tableExists(id)) {
-            tableRepository.updateTable(id, x, y);
+            tableRepository.updateTable(id, coordinates.getX(), coordinates.getY());
         } else {
             throw new TableDoesNotExistException();
         }
@@ -49,11 +49,11 @@ public class TableService {
         }
     }
 
-    public void addNewTable(Integer x, Integer y) {
+    public Integer addNewTable(Coordinates coordinates) {
         Table table = new Table();
-        table.setX(x);
-        table.setY(y);
-        tableRepository.addTable(table);
+        table.setX(coordinates.getX());
+        table.setY(coordinates.getY());
+        return tableRepository.addTable(table);
     }
 
     public List<TableBla> getAllTables() {
@@ -62,7 +62,6 @@ public class TableService {
 
     public Integer getSubtotalForTable(Integer id) throws TableDoesNotExistException {
         if (tableRepository.tableExists(id)) {
-
             return tableRepository.tableItemList(id).stream().map(itemService::getItemPriceByName).collect(Collectors.toUnmodifiableList()).stream().mapToInt(Integer::intValue).sum();
         } else {
             throw new TableDoesNotExistException();

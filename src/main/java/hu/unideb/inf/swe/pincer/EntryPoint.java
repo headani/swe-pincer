@@ -31,8 +31,8 @@ public class EntryPoint extends Application {
         stage.onCloseRequestProperty().set(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Biztos ki akarsz lépni?");
-            var resultObj = alert.showAndWait();
-            if (resultObj.isPresent() && resultObj.get() == ButtonType.OK) {
+            var res = alert.showAndWait();
+            if (res.isPresent() && res.get() == ButtonType.OK) {
                 Platform.exit();
             }
             event.consume();

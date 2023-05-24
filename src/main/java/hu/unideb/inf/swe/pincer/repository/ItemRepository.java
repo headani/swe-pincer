@@ -7,7 +7,6 @@ import org.jdbi.v3.core.Jdbi;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class ItemRepository {
 

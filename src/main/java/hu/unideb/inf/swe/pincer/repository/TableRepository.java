@@ -13,12 +13,13 @@ public class TableRepository {
 
     private final Jdbi jdbi = JdbiProvider.getInstance();
 
-    public void addTable(Table table) {
+    public Integer addTable(Table table) {
         Integer lastId = jdbi.withExtension(TableDao.class, dao ->  {
             dao.insertTable(table);
             return dao.lastInsertId();
         });
         jdbi.useExtension(TableItemJoinDao.class, dao -> dao.createTable(lastId));
+        return lastId;
     }
 
     public void updateTable(Integer id, Integer x, Integer y) {
@@ -44,5 +45,9 @@ public class TableRepository {
 
     public List<String> tableItemList(Integer id) {
         return jdbi.withExtension(TableItemJoinDao.class, dao -> Collections.unmodifiableList(dao.listTableItems(id)));
+    }
+
+    public Integer getLastAddedId() {
+        return jdbi.withExtension(TableDao.class, TableDao::lastInsertId);
     }
 }
