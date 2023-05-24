@@ -1,5 +1,8 @@
 package hu.unideb.inf.swe.pincer.bla;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 import java.util.Objects;
 
 public class ItemBla {
@@ -9,12 +12,12 @@ public class ItemBla {
 
     public ItemBla(String name, Integer price) {
         this.name = name;
-        this.price = price;
+        this.price.set(price);
     }
 
     private String name;
 
-    private Integer price;
+    private final IntegerProperty price = new SimpleIntegerProperty();
 
     public String getName() {
         return name;
@@ -25,11 +28,11 @@ public class ItemBla {
     }
 
     public Integer getPrice() {
-        return price;
+        return price.get();
     }
 
     public void setPrice(Integer price) {
-        this.price = price;
+        this.price.set(price);
     }
 
     @Override
@@ -37,19 +40,23 @@ public class ItemBla {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ItemBla itemBla = (ItemBla) o;
-        return Objects.equals(name, itemBla.name) && Objects.equals(price, itemBla.price);
+        return Objects.equals(name, itemBla.name) && Objects.equals(price.get(), itemBla.price.get());
     }
 
     @Override
     public String toString() {
         return "ItemBla{" +
                 "name='" + name + '\'' +
-                ", price=" + price +
+                ", price=" + price.get() +
                 '}';
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price);
+        return Objects.hash(name, price.get());
+    }
+
+    public IntegerProperty priceProperty() {
+        return price;
     }
 }

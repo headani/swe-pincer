@@ -60,4 +60,8 @@ public class ItemService {
     public List<ItemBla> getAllItems() {
         return itemRepository.itemList().stream().map(i -> new ItemBla(i.getName(), i.getPrice())).collect(Collectors.toUnmodifiableList());
     }
+
+    public Boolean itemExists(String name) {
+        return itemRepository.itemExists(name);
+    }
 }

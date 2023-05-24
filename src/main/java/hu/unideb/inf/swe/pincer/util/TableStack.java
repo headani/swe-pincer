@@ -3,11 +3,17 @@ package hu.unideb.inf.swe.pincer.util;
 import hu.unideb.inf.swe.pincer.bla.TableBla;
 import hu.unideb.inf.swe.pincer.service.TableService;
 import hu.unideb.inf.swe.pincer.util.ex.TableDoesNotExistException;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+
 
 public class TableStack extends StackPane {
 
@@ -20,6 +26,8 @@ public class TableStack extends StackPane {
     private final Rectangle rectangle = new Rectangle();
     private final Text number = new Text();
 
+    private final ContextMenu contextMenu = new ContextMenu();
+
     private void initialize() {
         number.setText(this.tableId.toString());
         number.setFont(Font.font(24));
@@ -31,34 +39,76 @@ public class TableStack extends StackPane {
         rectangle.setStroke(Color.BLACK);
 
         this.setOnMousePressed(e -> {
-            sceneX = e.getSceneX();
-            sceneY = e.getSceneY();
-            layoutX = this.getLayoutX();
-            layoutY = this.getLayoutY();
+            if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
+                // TODO: asztalon levo tetelek megjelenitese
+            } else if (e.getButton() == MouseButton.PRIMARY) {
+                sceneX = e.getSceneX();
+                sceneY = e.getSceneY();
+                layoutX = this.getLayoutX();
+                layoutY = this.getLayoutY();
+            }
         });
 
         this.setOnMouseDragged(e -> {
-            double offsetX = e.getSceneX() - sceneX;
-            double offsetY = e.getSceneY() - sceneY;
-            this.setTranslateX(offsetX);
-            this.setTranslateY(offsetY);
+            if (e.getButton() == MouseButton.PRIMARY) {
+                if (e.getSceneX() < 1230 && e.getSceneX() > 50) {
+                    double offsetX = e.getSceneX() - sceneX;
+                    this.setTranslateX(offsetX);
+                }
+                if (e.getSceneY() < 670 && e.getSceneY() > 50) {
+                    double offsetY = e.getSceneY() - sceneY;
+                    this.setTranslateY(offsetY);
+                }
+            }
         });
 
         this.setOnMouseReleased(e -> {
-            double landedX = layoutX + this.getTranslateX();
-            double landedY = layoutY + this.getTranslateY();
+            if (e.getButton() == MouseButton.PRIMARY) {
+                double landedX = layoutX + this.getTranslateX();
+                double landedY = layoutY + this.getTranslateY();
 
-            try {
-                tableService.updateTablePosition(this.tableId, new Coordinates((int) landedX, (int) landedY));
-            } catch (TableDoesNotExistException ex) {
-                throw new RuntimeException(ex);
+                try {
+                    tableService.updateTablePosition(this.tableId, new Coordinates((int) landedX, (int) landedY));
+                } catch (TableDoesNotExistException ex) {
+                    ExceptionAlert alert = new ExceptionAlert(ex);
+                    alert.showAndWait();
+                }
+
+                this.setLayoutX(landedX);
+                this.setLayoutY(landedY);
+
+                this.setTranslateX(0);
+                this.setTranslateY(0);
             }
+        });
 
-            this.setLayoutX(landedX);
-            this.setLayoutY(landedY);
+        MenuItem cmDelete = new MenuItem("Asztal törlése");
+        cmDelete.setOnAction(e -> {
+            try {
+                if (tableService.getTableById(this.tableId).getItems().isEmpty()) {
+                   tableService.deleteTable(this.tableId);
+                   this.setDisabled(true);
+                   this.setVisible(false);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
+                    alert.setHeaderText("Az asztal nem üres");
+                    alert.showAndWait();
+                }
+            } catch (TableDoesNotExistException ex) {
+                ExceptionAlert alert = new ExceptionAlert(ex);
+                alert.showAndWait();
+            }
+        });
 
-            this.setTranslateX(0);
-            this.setTranslateY(0);
+        MenuItem cmPay = new MenuItem("Kifizetés");
+        cmPay.setOnAction(e -> {
+            // TODO: kifizetes
+        });
+
+        contextMenu.getItems().addAll(cmDelete, cmPay);
+
+        this.setOnContextMenuRequested(e -> {
+            contextMenu.show(this, e.getScreenX(), e.getScreenY());
         });
 
         this.getChildren().addAll(rectangle, number);

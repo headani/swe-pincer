@@ -5,8 +5,9 @@
 
 <GridPane stylesheets="@ui.css" styleClass="gridPane" fx:id="gridPane" hgap="5" vgap="5" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112" fx:controller="hu.unideb.inf.swe.pincer.controller.UIController">
 
-    <Pane minHeight="700" minWidth="1260" GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="box" stylesheets="@ui.css" styleClass="pane" >
-        <Button GridPane.vgrow="ALWAYS" maxHeight="32" maxWidth="32" StackPane.alignment="TOP_LEFT" translateX="10" translateY="10" fx:id="addButton" styleClass="addButton" stylesheets="@ui.css" onAction="#addTableButtonEvent" />
+    <Pane minHeight="700" minWidth="1260" maxHeight="700" maxWidth="1260" GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="box" stylesheets="@ui.css" styleClass="pane" >
+        <Button maxHeight="32" maxWidth="32" translateX="8" translateY="8" fx:id="addButton" styleClass="addButton" stylesheets="@ui.css" onAction="#addTableButtonEvent" />
+        <Button maxHeight="32" maxWidth="64" translateX="8" translateY="64" fx:id="menuButton" styleClass="menuButton" stylesheets="@ui.css" onAction="#menuButtonEvent"  text="Menü"/>
     </Pane>
 
 </GridPane>

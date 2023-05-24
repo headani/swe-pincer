@@ -1,14 +1,19 @@
 package hu.unideb.inf.swe.pincer.controller;
 
+import hu.unideb.inf.swe.pincer.Main;
 import hu.unideb.inf.swe.pincer.service.TableService;
 import hu.unideb.inf.swe.pincer.util.Coordinates;
 import hu.unideb.inf.swe.pincer.util.TableStack;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -18,6 +23,9 @@ public class UIController implements Initializable {
 
     @FXML
     public Button addButton;
+
+    @FXML
+    public Button menuButton;
 
     @FXML
     public GridPane gridPane;
@@ -36,5 +44,20 @@ public class UIController implements Initializable {
         TableStack tableStack = new TableStack(tableService.addNewTable(coordinates), coordinates);
 
         box.getChildren().add(tableStack);
+    }
+
+    @FXML
+    public void menuButtonEvent() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("menu/menu.fxml"));
+        Stage stage = new Stage();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Menü");
+        stage.minWidthProperty().set(480);
+        stage.minHeightProperty().set(640);
+        stage.maxWidthProperty().set(480);
+        stage.maxHeightProperty().set(640);
+        stage.resizableProperty().setValue(false);
+        stage.setScene(scene);
+        stage.show();
     }
 }

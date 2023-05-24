@@ -22,11 +22,13 @@ public class EntryPoint extends Application {
 
         InitializeDatabase.Initialize();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(EntryPoint.class.getResource("ui/ui.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ui/ui.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Pincér");
         stage.minWidthProperty().set(1280);
         stage.minHeightProperty().set(720);
+        stage.maxWidthProperty().set(1280);
+        stage.maxHeightProperty().set(720);
         stage.resizableProperty().setValue(false);
         stage.onCloseRequestProperty().set(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
