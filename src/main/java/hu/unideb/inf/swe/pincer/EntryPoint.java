@@ -1,6 +1,12 @@
 package hu.unideb.inf.swe.pincer;
 
+import hu.unideb.inf.swe.pincer.jdbi.InitializeDatabase;
+import hu.unideb.inf.swe.pincer.jdbi.JdbiProvider;
+import hu.unideb.inf.swe.pincer.jdbi.dao.ItemDao;
+import hu.unideb.inf.swe.pincer.jdbi.dao.TableDao;
 import hu.unideb.inf.swe.pincer.model.Item;
+import hu.unideb.inf.swe.pincer.model.Table;
+import hu.unideb.inf.swe.pincer.repository.TableRepository;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -22,14 +28,7 @@ public class EntryPoint extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        Jdbi jdbi = Jdbi.create("jdbc:mysql://localhost:3306/pincer", "root", "root");
-        List<Item> items = jdbi.withHandle(handle -> {
-            handle.execute("create table if not exists item (id int auto_increment not null, name varchar(255) not null, price int not null, primary key(id))");
-
-            return handle.createQuery("SELECT * FROM item ORDER BY name")
-                    .mapToBean(Item.class)
-                    .list();
-        });
+        InitializeDatabase.Initialize();
 
         FXMLLoader fxmlLoader = new FXMLLoader(EntryPoint.class.getResource("ui/ui.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
