@@ -1,7 +1,10 @@
 package hu.unideb.inf.swe.pincer.jdbi.dao;
 
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
+
+import java.util.List;
 
 public interface TableItemJoinDao {
 
@@ -13,4 +16,7 @@ public interface TableItemJoinDao {
 
     @SqlUpdate("drop table table_:id")
     void dropTable(@Bind("id") Integer id);
+
+    @SqlQuery("select * from table_:id order by item_name")
+    List<String> listTableItems(@Bind("id") Integer id);
 }

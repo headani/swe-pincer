@@ -1,12 +1,6 @@
 package hu.unideb.inf.swe.pincer;
 
 import hu.unideb.inf.swe.pincer.jdbi.InitializeDatabase;
-import hu.unideb.inf.swe.pincer.jdbi.JdbiProvider;
-import hu.unideb.inf.swe.pincer.jdbi.dao.ItemDao;
-import hu.unideb.inf.swe.pincer.jdbi.dao.TableDao;
-import hu.unideb.inf.swe.pincer.model.Item;
-import hu.unideb.inf.swe.pincer.model.Table;
-import hu.unideb.inf.swe.pincer.repository.TableRepository;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,10 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import org.jdbi.v3.core.Jdbi;
 
 import java.io.IOException;
-import java.util.List;
 
 public class EntryPoint extends Application {
 

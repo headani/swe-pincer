@@ -1,5 +1,6 @@
 package hu.unideb.inf.swe.pincer.jdbi.dao;
 
+import hu.unideb.inf.swe.pincer.model.Item;
 import hu.unideb.inf.swe.pincer.model.Table;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
@@ -25,6 +26,13 @@ public interface TableDao {
 
     @SqlUpdate("update tables set x = :x, y = :y where id = :id")
     void updateTable(@Bind("id") Integer id, @Bind("x") Integer x, @Bind("y") Integer y);
+
+    @SqlQuery("select * from tables where id = :id")
+    @RegisterBeanMapper(Table.class)
+    Table getTable(@Bind("id") Integer id);
+
+    @SqlQuery("select count(id) from tables where id = :id")
+    Integer countTableIds(@Bind("id") Integer id);
 
     @SqlQuery("select * from tables order by id")
     @RegisterBeanMapper(Table.class)

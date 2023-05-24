@@ -8,6 +8,7 @@ import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemDao {
 
@@ -22,6 +23,13 @@ public interface ItemDao {
 
     @SqlUpdate("update items set price = :price where name = :name")
     void updateItem(@Bind("name") String name, @Bind("price") Integer price);
+
+    @SqlQuery("select * from items where name = :name")
+    @RegisterBeanMapper(Item.class)
+    Item getItem(@Bind("name") String name);
+
+    @SqlQuery("select count(name) from items where name = :name")
+    Integer countItemNames(@Bind("name") String name);
 
     @SqlQuery("select * from items order by name")
     @RegisterBeanMapper(Item.class)

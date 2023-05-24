@@ -11,12 +11,9 @@ import java.util.List;
 
 public class TableRepository {
 
-    private TableRepository() {
-    }
+    private final Jdbi jdbi = JdbiProvider.getInstance();
 
-    private static final Jdbi jdbi = JdbiProvider.getInstance();
-
-    public static void addTable(Table table) {
+    public void addTable(Table table) {
         Integer lastId = jdbi.withExtension(TableDao.class, dao ->  {
             dao.insertTable(table);
             return dao.lastInsertId();
@@ -24,16 +21,28 @@ public class TableRepository {
         jdbi.useExtension(TableItemJoinDao.class, dao -> dao.createTable(lastId));
     }
 
-    public static void updateTable(Integer id, Integer x, Integer y) {
+    public void updateTable(Integer id, Integer x, Integer y) {
         jdbi.useExtension(TableDao.class, dao -> dao.updateTable(id, x, y));
     }
 
-    public static void deleteTable(Integer id) {
+    public Table getTable(Integer id) {
+        return jdbi.withExtension(TableDao.class, dao -> dao.getTable(id));
+    }
+
+    public Boolean tableExists(Integer id) {
+        return jdbi.withExtension(TableDao.class, dao -> dao.countTableIds(id)) == 0 ? Boolean.FALSE : Boolean.TRUE;
+    }
+
+    public void deleteTable(Integer id) {
         jdbi.useExtension(TableDao.class, dao -> dao.deleteTable(id));
         jdbi.useExtension(TableItemJoinDao.class, dao -> dao.dropTable(id));
     }
 
-    public static List<Table> tableList() {
+    public List<Table> tableList() {
         return jdbi.withExtension(TableDao.class, dao -> Collections.unmodifiableList(dao.listTables()));
+    }
+
+    public List<String> tableItemList(Integer id) {
+        return jdbi.withExtension(TableItemJoinDao.class, dao -> Collections.unmodifiableList(dao.listTableItems(id)));
     }
 }
