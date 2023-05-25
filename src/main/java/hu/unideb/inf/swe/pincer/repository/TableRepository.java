@@ -50,4 +50,8 @@ public class TableRepository {
     public void addItemToTable(Integer id, String name) {
         jdbi.useExtension(TableItemJoinDao.class, dao -> dao.insertItemToTable(id, name));
     }
+
+    public void emptyTable(Integer id) {
+        jdbi.useExtension(TableItemJoinDao.class, dao -> dao.truncateTable(id));
+    }
 }

@@ -87,4 +87,12 @@ public class TableService {
             throw new TableDoesNotExistException();
         }
     }
+
+    public void emptyTable(Integer id) throws TableDoesNotExistException {
+        if (tableRepository.tableExists(id)) {
+            tableRepository.emptyTable(id);
+        } else {
+            throw new TableDoesNotExistException();
+        }
+    }
 }

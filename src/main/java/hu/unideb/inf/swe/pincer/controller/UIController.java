@@ -5,6 +5,8 @@ import hu.unideb.inf.swe.pincer.service.TableService;
 import hu.unideb.inf.swe.pincer.util.Coordinates;
 import hu.unideb.inf.swe.pincer.util.ExceptionAlert;
 import hu.unideb.inf.swe.pincer.util.TableStack;
+import hu.unideb.inf.swe.pincer.util.TableStateProperty;
+import hu.unideb.inf.swe.pincer.util.TableStatePropertyList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

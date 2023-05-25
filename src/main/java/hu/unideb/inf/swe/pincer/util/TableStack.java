@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class TableStack extends StackPane {
@@ -126,16 +127,27 @@ public class TableStack extends StackPane {
 
         MenuItem cmPay = new MenuItem("Kifizetés");
         cmPay.setOnAction(e -> {
-            // TODO: kifizetes
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Ki lett fizetve a számla?", ButtonType.YES, ButtonType.NO);
+            try {
+                alert.setHeaderText(DiscountCalculator.calculate(tableService.getSubtotalForTable(this.tableId)) + " Ft");
+                Optional<ButtonType> res = alert.showAndWait();
+                if (res.isPresent() && res.get() == ButtonType.YES) {
+                    tableService.emptyTable(this.tableId);
+                    this.setFreeState();
+                }
+            } catch (TableDoesNotExistException ex) {
+                ExceptionAlert exceptionAlert = new ExceptionAlert(ex);
+                exceptionAlert.showAndWait();
+            }
         });
 
         contextMenu.getItems().addAll(cmDelete, cmPay);
 
-        this.setOnContextMenuRequested(e -> {
-            contextMenu.show(this, e.getScreenX(), e.getScreenY());
-        });
+        this.setOnContextMenuRequested(e -> contextMenu.show(this, e.getScreenX(), e.getScreenY()));
 
         this.getChildren().addAll(rectangle, number);
+
+        TableStatePropertyList.getInstance().add(new TableStateProperty(this.tableId, this.rectangle.fillProperty()));
     }
     
     public TableStack(TableBla tableBla) {

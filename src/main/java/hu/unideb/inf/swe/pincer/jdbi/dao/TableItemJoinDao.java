@@ -19,4 +19,7 @@ public interface TableItemJoinDao {
 
     @SqlQuery("select * from table_:id order by item_name")
     List<String> listTableItems(@Bind("id") Integer id);
+
+    @SqlUpdate("truncate table table_:id")
+    void truncateTable(@Bind("id") Integer id);
 }

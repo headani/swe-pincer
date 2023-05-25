@@ -55,15 +55,67 @@ public class MenuController implements Initializable {
 
         itemService.getAllItems().forEach(i -> tableView.getItems().add(i));
 
+        ContextMenu emptyMenu = new ContextMenu();
+        MenuItem emptyItem = new MenuItem("Új termék");
+
+        emptyItem.setOnAction(e -> {
+            Dialog<ItemBla> dialog = new Dialog<>();
+            dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+
+            GridPane dialogPane = new GridPane();
+            TextField inputName = new TextField();
+            Label inputLabelName = new Label();
+            TextField inputPrice = new TextField();
+            Label inputLabelPrice = new Label();
+
+            inputLabelName.setText("Terméknév");
+            inputLabelPrice.setText("Termékár");
+
+            dialogPane.add(inputLabelName, 0, 0);
+            dialogPane.add(inputName, 1, 0);
+            dialogPane.add(inputLabelPrice, 0, 1);
+            dialogPane.add(inputPrice, 1, 1);
+
+            dialog.setOnShown(ose -> {
+                Platform.runLater(inputName::requestFocus);
+                ose.consume();
+            });
+
+            dialog.getDialogPane().setContent(dialogPane);
+            dialog.setResultConverter(p -> {
+                if (p == ButtonType.OK) {
+                    try {
+                        return new ItemBla(inputName.getText(), Integer.parseInt(inputPrice.getText()));
+                    } catch (NumberFormatException ex) {
+                        return null;
+                    }
+                }
+                return null;
+            });
+
+            Optional<ItemBla> newItem = dialog.showAndWait();
+            if (newItem.isPresent()) {
+                try {
+                    itemService.addNewItem(newItem.get());
+                    tableView.getItems().add(newItem.get());
+                } catch (ItemAlreadyExistsException ex) {
+                    ExceptionAlert alert = new ExceptionAlert(ex);
+                    alert.showAndWait();
+                }
+            }
+        });
+
+        emptyMenu.getItems().add(emptyItem);
+
+        tableView.setOnContextMenuRequested(e -> emptyMenu.show(tableView, e.getScreenX(), e.getScreenY()));
+
         tableView.setRowFactory(f -> {
             TableRow<ItemBla> row = new TableRow<>();
 
             ContextMenu rowMenu = new ContextMenu();
-            ContextMenu newItemRowMenu = new ContextMenu();
 
             MenuItem editItem = new MenuItem("Termékár változtatás");
             MenuItem removeItem = new MenuItem("Termék eltávolítás");
-            MenuItem newItemItem = new MenuItem("Új termék");
 
             removeItem.setOnAction(e -> {
                 try {
@@ -116,59 +168,11 @@ public class MenuController implements Initializable {
                 }
             });
 
-            newItemItem.setOnAction(e -> {
-                Dialog<ItemBla> dialog = new Dialog<>();
-                dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-
-                GridPane dialogPane = new GridPane();
-                TextField inputName = new TextField();
-                Label inputLabelName = new Label();
-                TextField inputPrice = new TextField();
-                Label inputLabelPrice = new Label();
-
-                inputLabelName.setText("Terméknév");
-                inputLabelPrice.setText("Termékár");
-
-                dialogPane.add(inputLabelName, 0, 0);
-                dialogPane.add(inputName, 1, 0);
-                dialogPane.add(inputLabelPrice, 0, 1);
-                dialogPane.add(inputPrice, 1, 1);
-
-                dialog.setOnShown(ose -> {
-                    Platform.runLater(inputName::requestFocus);
-                    ose.consume();
-                });
-
-                dialog.getDialogPane().setContent(dialogPane);
-                dialog.setResultConverter(p -> {
-                    if (p == ButtonType.OK) {
-                        try {
-                            return new ItemBla(inputName.getText(), Integer.parseInt(inputPrice.getText()));
-                        } catch (NumberFormatException ex) {
-                            return null;
-                        }
-                    }
-                    return null;
-                });
-
-                Optional<ItemBla> newItem = dialog.showAndWait();
-                if (newItem.isPresent()) {
-                    try {
-                        itemService.addNewItem(newItem.get());
-                        tableView.getItems().add(newItem.get());
-                    } catch (ItemAlreadyExistsException ex) {
-                        ExceptionAlert alert = new ExceptionAlert(ex);
-                        alert.showAndWait();
-                    }
-                }
-            });
-
             rowMenu.getItems().addAll(editItem, removeItem);
-            newItemRowMenu.getItems().add(newItemItem);
 
             row.contextMenuProperty().bind(
                     Bindings.when(row.emptyProperty())
-                            .then(newItemRowMenu)
+                            .then(emptyMenu)
                             .otherwise(rowMenu)
             );
 
