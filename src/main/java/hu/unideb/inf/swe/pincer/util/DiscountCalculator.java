@@ -5,7 +5,7 @@ public class DiscountCalculator {
     private DiscountCalculator() {
     }
 
-    public static Integer calculate(Integer subtotal) {
+    public static Integer calculate(Integer subtotal) throws ArithmeticException {
         if (subtotal > 20000) {
             return Math.toIntExact(Math.round(subtotal * 0.80));
         } else if (subtotal > 10000) {

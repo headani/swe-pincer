@@ -135,7 +135,7 @@ public class TableStack extends StackPane {
                     tableService.emptyTable(this.tableId);
                     this.setFreeState();
                 }
-            } catch (TableDoesNotExistException ex) {
+            } catch (TableDoesNotExistException | ArithmeticException ex) {
                 ExceptionAlert exceptionAlert = new ExceptionAlert(ex);
                 exceptionAlert.showAndWait();
             }

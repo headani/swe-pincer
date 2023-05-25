@@ -85,7 +85,8 @@ public class MenuController implements Initializable {
             dialog.setResultConverter(p -> {
                 if (p == ButtonType.OK) {
                     try {
-                        return new ItemBla(inputName.getText(), Integer.parseInt(inputPrice.getText()));
+                        int parsable = Integer.parseInt(inputPrice.getText());
+                        return parsable >= 0 ? new ItemBla(inputName.getText(), parsable) : null;
                     } catch (NumberFormatException ex) {
                         return null;
                     }
@@ -148,7 +149,8 @@ public class MenuController implements Initializable {
                 dialog.setResultConverter(p -> {
                     if (p == ButtonType.OK) {
                         try {
-                            return Integer.parseInt(input.getText());
+                            int parsable = Integer.parseInt(input.getText());
+                            return parsable >= 0 ? parsable : null;
                         } catch (NumberFormatException ex) {
                             return null;
                         }
