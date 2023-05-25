@@ -57,7 +57,6 @@ public class TableStack extends StackPane {
                     ExceptionAlert alert = new ExceptionAlert(ex);
                     alert.showAndWait();
                 }
-                stage.setUserData(this.tableId);
                 stage.setTitle("Asztal " + this.tableId);
                 stage.minWidthProperty().set(480);
                 stage.minHeightProperty().set(640);

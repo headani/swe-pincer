@@ -1,6 +1,5 @@
 package hu.unideb.inf.swe.pincer.jdbi.dao;
 
-import hu.unideb.inf.swe.pincer.model.Item;
 import hu.unideb.inf.swe.pincer.model.Table;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
