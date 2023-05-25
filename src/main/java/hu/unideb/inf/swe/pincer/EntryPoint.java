@@ -1,6 +1,7 @@
 package hu.unideb.inf.swe.pincer;
 
 import hu.unideb.inf.swe.pincer.jdbi.InitializeDatabase;
+import hu.unideb.inf.swe.pincer.util.ExceptionAlert;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -18,12 +19,18 @@ public class EntryPoint extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
 
         InitializeDatabase.Initialize();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ui/ui.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException ex) {
+            ExceptionAlert alert = new ExceptionAlert(ex);
+            alert.showAndWait();
+        }
         stage.setTitle("Pincér");
         stage.minWidthProperty().set(1280);
         stage.minHeightProperty().set(720);

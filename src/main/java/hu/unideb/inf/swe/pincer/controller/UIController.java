@@ -3,6 +3,7 @@ package hu.unideb.inf.swe.pincer.controller;
 import hu.unideb.inf.swe.pincer.Main;
 import hu.unideb.inf.swe.pincer.service.TableService;
 import hu.unideb.inf.swe.pincer.util.Coordinates;
+import hu.unideb.inf.swe.pincer.util.ExceptionAlert;
 import hu.unideb.inf.swe.pincer.util.TableStack;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,10 +48,16 @@ public class UIController implements Initializable {
     }
 
     @FXML
-    public void menuButtonEvent() throws IOException {
+    public void menuButtonEvent() {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("menu/menu.fxml"));
         Stage stage = new Stage();
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException ex) {
+            ExceptionAlert alert = new ExceptionAlert(ex);
+            alert.showAndWait();
+        }
         stage.setTitle("Menü");
         stage.minWidthProperty().set(480);
         stage.minHeightProperty().set(640);

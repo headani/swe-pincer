@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane stylesheets="@table.css" styleClass="gridPane" fx:id="gridPane" hgap="5" vgap="5" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.112" fx:controller="hu.unideb.inf.swe.pincer.controller.TableController">
+
+    <TableView stylesheets="@table.css" fx:id="tableView" styleClass="table" minWidth="440" minHeight="580" maxWidth="440" maxHeight="580">
+    </TableView>
+
+</GridPane>

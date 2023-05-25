@@ -47,7 +47,7 @@ public class TableRepository {
         return jdbi.withExtension(TableItemJoinDao.class, dao -> Collections.unmodifiableList(dao.listTableItems(id)));
     }
 
-    public Integer getLastAddedId() {
-        return jdbi.withExtension(TableDao.class, TableDao::lastInsertId);
+    public void addItemToTable(Integer id, String name) {
+        jdbi.useExtension(TableItemJoinDao.class, dao -> dao.insertItemToTable(id, name));
     }
 }

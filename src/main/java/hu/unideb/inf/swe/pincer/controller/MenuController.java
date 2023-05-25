@@ -39,24 +39,23 @@ public class MenuController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         TableColumn<ItemBla, String> nameColumn = new TableColumn<>("Terméknév");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameColumn.setResizable(false);
         nameColumn.setEditable(false);
         nameColumn.setReorderable(false);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn<ItemBla, String> priceColumn = new TableColumn<>("Termékár");
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         priceColumn.setResizable(false);
         priceColumn.setEditable(false);
         priceColumn.setReorderable(false);
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         tableView.getColumns().add(nameColumn);
         tableView.getColumns().add(priceColumn);
 
         itemService.getAllItems().forEach(i -> tableView.getItems().add(i));
 
-        tableView.setRowFactory(f ->
-        {
+        tableView.setRowFactory(f -> {
             TableRow<ItemBla> row = new TableRow<>();
 
             ContextMenu rowMenu = new ContextMenu();
@@ -87,10 +86,12 @@ public class MenuController implements Initializable {
                 inputLabel.setText("Új ár");
                 dialogPane.add(inputLabel, 0, 0);
                 dialogPane.add(input, 1, 0);
+
                 dialog.setOnShown(ose -> {
                     Platform.runLater(input::requestFocus);
                     ose.consume();
                 });
+
                 dialog.getDialogPane().setContent(dialogPane);
                 dialog.setResultConverter(p -> {
                     if (p == ButtonType.OK) {
@@ -127,14 +128,17 @@ public class MenuController implements Initializable {
 
                 inputLabelName.setText("Terméknév");
                 inputLabelPrice.setText("Termékár");
+
                 dialogPane.add(inputLabelName, 0, 0);
                 dialogPane.add(inputName, 1, 0);
                 dialogPane.add(inputLabelPrice, 0, 1);
                 dialogPane.add(inputPrice, 1, 1);
+
                 dialog.setOnShown(ose -> {
                     Platform.runLater(inputName::requestFocus);
                     ose.consume();
                 });
+
                 dialog.getDialogPane().setContent(dialogPane);
                 dialog.setResultConverter(p -> {
                     if (p == ButtonType.OK) {
@@ -146,7 +150,7 @@ public class MenuController implements Initializable {
                     }
                     return null;
                 });
-                
+
                 Optional<ItemBla> newItem = dialog.showAndWait();
                 if (newItem.isPresent()) {
                     try {

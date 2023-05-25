@@ -4,8 +4,10 @@ import hu.unideb.inf.swe.pincer.bla.TableBla;
 import hu.unideb.inf.swe.pincer.model.Table;
 import hu.unideb.inf.swe.pincer.repository.TableRepository;
 import hu.unideb.inf.swe.pincer.util.Coordinates;
+import hu.unideb.inf.swe.pincer.util.ex.ItemDoesNotExistException;
 import hu.unideb.inf.swe.pincer.util.ex.TableDoesNotExistException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +65,24 @@ public class TableService {
     public Integer getSubtotalForTable(Integer id) throws TableDoesNotExistException {
         if (tableRepository.tableExists(id)) {
             return tableRepository.tableItemList(id).stream().map(itemService::getItemPriceByName).collect(Collectors.toUnmodifiableList()).stream().mapToInt(Integer::intValue).sum();
+        } else {
+            throw new TableDoesNotExistException();
+        }
+    }
+
+    public void addItemToTable(Integer id, String name) throws TableDoesNotExistException, ItemDoesNotExistException {
+        if (tableRepository.tableExists(id) && itemService.itemExists(name)) {
+            tableRepository.addItemToTable(id, name);
+        } else if (!tableRepository.tableExists(id)) {
+            throw new TableDoesNotExistException();
+        } else if (!itemService.itemExists(name)) {
+            throw new ItemDoesNotExistException();
+        }
+    }
+
+    public List<String> getTableItemList(Integer id) throws TableDoesNotExistException {
+        if (tableRepository.tableExists(id)) {
+            return Collections.unmodifiableList(tableRepository.tableItemList(id));
         } else {
             throw new TableDoesNotExistException();
         }

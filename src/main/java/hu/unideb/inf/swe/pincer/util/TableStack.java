@@ -1,8 +1,11 @@
 package hu.unideb.inf.swe.pincer.util;
 
+import hu.unideb.inf.swe.pincer.Main;
 import hu.unideb.inf.swe.pincer.bla.TableBla;
 import hu.unideb.inf.swe.pincer.service.TableService;
 import hu.unideb.inf.swe.pincer.util.ex.TableDoesNotExistException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
@@ -13,6 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 
 public class TableStack extends StackPane {
@@ -40,7 +46,25 @@ public class TableStack extends StackPane {
 
         this.setOnMousePressed(e -> {
             if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
-                // TODO: asztalon levo tetelek megjelenitese
+                TableIdQueue.getInstance().add(tableId);
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("table/table.fxml"));
+                Stage stage = new Stage();
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException ex) {
+                    ExceptionAlert alert = new ExceptionAlert(ex);
+                    alert.showAndWait();
+                }
+                stage.setUserData(this.tableId);
+                stage.setTitle("Asztal " + this.tableId);
+                stage.minWidthProperty().set(480);
+                stage.minHeightProperty().set(640);
+                stage.maxWidthProperty().set(480);
+                stage.maxHeightProperty().set(640);
+                stage.resizableProperty().setValue(false);
+                stage.setScene(scene);
+                stage.show();
             } else if (e.getButton() == MouseButton.PRIMARY) {
                 sceneX = e.getSceneX();
                 sceneY = e.getSceneY();
