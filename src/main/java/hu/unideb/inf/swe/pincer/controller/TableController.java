@@ -6,6 +6,7 @@ import hu.unideb.inf.swe.pincer.service.ItemService;
 import hu.unideb.inf.swe.pincer.service.TableService;
 import hu.unideb.inf.swe.pincer.util.AutocompletionTextField;
 import hu.unideb.inf.swe.pincer.util.ExceptionAlert;
+import hu.unideb.inf.swe.pincer.util.ItemOccurrenceHelper;
 import hu.unideb.inf.swe.pincer.util.TableIdQueue;
 import hu.unideb.inf.swe.pincer.util.TableStack;
 import hu.unideb.inf.swe.pincer.util.TableStatePropertyList;
@@ -65,9 +66,7 @@ public class TableController implements Initializable {
         }
         List<ItemOccurrenceBla> occurrenceList = new ArrayList<>();
         try {
-            List<String> itemList = tableService.getTableItemList(this.tableId);
-            Set<String> distinct = new HashSet<>(itemList);
-            occurrenceList = distinct.stream().map(d -> new ItemOccurrenceBla(d, Collections.frequency(itemList, d))).collect(Collectors.toUnmodifiableList());
+            occurrenceList = ItemOccurrenceHelper.getOccurrences(tableService.getTableItemList(this.tableId));
         } catch (TableDoesNotExistException ex) {
             ExceptionAlert alert = new ExceptionAlert(ex);
             alert.showAndWait();
@@ -161,7 +160,7 @@ public class TableController implements Initializable {
                     alert.showAndWait();
                 }
             });
-            
+
             alreadyExistsMenu.getItems().add(itemAlreadyExistsItem);
 
             row.contextMenuProperty().bind(

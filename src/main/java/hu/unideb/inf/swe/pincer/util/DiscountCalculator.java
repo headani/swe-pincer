@@ -12,6 +12,8 @@ public class DiscountCalculator {
             return Math.toIntExact(Math.round(subtotal * 0.90));
         } else if (subtotal > 5000) {
             return Math.toIntExact(Math.round(subtotal * 0.95));
+        } else if (subtotal < 0) {
+            throw new ArithmeticException("Subtotal below zero!");
         } else {
             return subtotal;
         }
